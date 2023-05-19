@@ -4,3 +4,7 @@ variable "vpc_id" {
 variable "availabilityzone" {
   type = string
 }
+
+variable "availabilityzone_b" {
+  type = string
+}

@@ -1,4 +1,4 @@
-variable "subnetid" {
+variable "subnetId" {
   type = string
 }
 
@@ -6,4 +6,4 @@ variable "subnetId_1b" {
   type = string
 }
 
-variable "securitygroups" {}
+variable "securitygroups_id" {}

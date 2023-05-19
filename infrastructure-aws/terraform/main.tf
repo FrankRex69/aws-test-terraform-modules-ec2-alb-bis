@@ -31,6 +31,7 @@ module "subnet" {
     source = "./modules/subnet"
     vpc_id = module.vpc.vpc.id
     availabilityzone = var.aws_availability_zone
+    availabilityzone_b = var.aws_availability_zone_b
 }
 # 5. Associate subnet with Route Table
 module "ass_route_table" {
@@ -47,9 +48,9 @@ module "sg" {
 # 7. Create a network interface with an ip in the subnet that was created in step 4
 module "ni" {
     source = "./modules/ni"
-    subnetid       = module.subnet.subnet_id
+    subnetId       = module.subnet.subnet_id
     subnetId_1b    = module.subnet.subnet_id_1b
-    securitygroups = [module.sg.security_groups_id]
+    securitygroups_id = [module.sg.security_groups_id]
 }
 # 8. Assign an elastic IP to the network interface created in step 7
 module "elastic_ip" {
@@ -63,6 +64,7 @@ module "ec2" {
     source = "./modules/ec2"
     ami_ec2               = var.aws_ami_ec2
     availabilityZone = var.aws_availability_zone
+    availabilityzone_b = var.aws_availability_zone_b
     keyName          = var.aws_key_name
     networkInterface_id = module.ni.network_interface_id
     networkInterface_id_b = module.ni.network_interface_id_b
@@ -70,24 +72,15 @@ module "ec2" {
     aws_user_data_2 = file("userdata_2.tpl")
 }
 
-
-
-# ---------------------------------------------------
-# Output
-
-output "vpc_id" {
-    value = module.vpc.vpc.id
-}
-output "serverPublic_ip" {
-    value = module.ec2.server_public_ip
-}
-output "serverPrivate_ip" {
-    value = module.ec2.server_private_ip
-}
-
-output "serverPublic_ip_2" {
-    value = module.ec2.server_public_ip_2
-}
-output "serverPrivate_ip_2" {
-    value = module.ec2.server_private_ip_2
+# 10. Create ALB (Application Load Balancer)
+module "alb" {
+    source             = "./modules/alb"
+    vpc_id             = module.vpc.vpc.id
+    server_public_ip   = module.ec2.server_public_ip
+    server_public_ip_2 = module.ec2.server_public_ip_2
+    server_private_ip   = module.ec2.server_private_ip
+    server_private_ip_2 = module.ec2.server_private_ip_2
+    securitygroups_id = [module.sg.security_groups_id]
+    subnetId       = module.subnet.subnet_id
+    subnetId_1b    = module.subnet.subnet_id_1b
 }

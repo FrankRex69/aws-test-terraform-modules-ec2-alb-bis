@@ -7,6 +7,9 @@ variable "aws_region" {
 variable "aws_availability_zone" {
     type = string
 }
+variable "aws_availability_zone_b" {
+    type = string
+}
 variable "aws_ami_ec2" {
     type = string
 }

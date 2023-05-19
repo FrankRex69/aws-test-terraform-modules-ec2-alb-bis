@@ -18,7 +18,7 @@ resource "aws_instance" "web-server-instance" {
 resource "aws_instance" "web-server-instance-b" {
   ami               = var.ami_ec2
   instance_type     = "t2.micro"
-  availability_zone = var.availabilityZone
+  availability_zone = var.availabilityzone_b
   key_name          = var.keyName
 
   network_interface {
