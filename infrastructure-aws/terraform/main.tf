@@ -1,22 +1,3 @@
-# Variables from variables.tfvars
-
-variable "aws_profile" {
-    type = string
-}
-variable "aws_region" {
-    type = string
-}
-variable "aws_availability_zone" {
-    type = string
-}
-variable "aws_ami_ec2" {
-    type = string
-}
-variable "aws_key_name" {
-    type = string
-}
-
-
 
 # ---------------------------------------------------
 # Provider
@@ -55,6 +36,7 @@ module "subnet" {
 module "ass_route_table" {
     source = "./modules/ass_route_table"
     subnetId = module.subnet.subnet_id
+    subnetId_1b = module.subnet.subnet_id_1b
     routeTable_id = module.rt.route_table_id
 }
 # 6. Create Security Group to allow port 22,80,443
@@ -65,13 +47,15 @@ module "sg" {
 # 7. Create a network interface with an ip in the subnet that was created in step 4
 module "ni" {
     source = "./modules/ni"
-    subnetid      = module.subnet.subnet_id
+    subnetid       = module.subnet.subnet_id
+    subnetId_1b    = module.subnet.subnet_id_1b
     securitygroups = [module.sg.security_groups_id]
 }
 # 8. Assign an elastic IP to the network interface created in step 7
 module "elastic_ip" {
     source = "./modules/elastic_ip"
     networkinterface         = module.ni.network_interface_id
+    networkinterface_b       = module.ni.network_interface_id_b
     internet_gateway = [module.ig.gateway]
 }
 # 9. Create Ec2 ==> Ubuntu server and install/enable Nginx
@@ -81,18 +65,29 @@ module "ec2" {
     availabilityZone = var.aws_availability_zone
     keyName          = var.aws_key_name
     networkInterface_id = module.ni.network_interface_id
+    networkInterface_id_b = module.ni.network_interface_id_b
     aws_user_data = file("userdata.tpl")
+    aws_user_data_2 = file("userdata_2.tpl")
 }
+
 
 
 # ---------------------------------------------------
 # Output
+
+output "vpc_id" {
+    value = module.vpc.vpc.id
+}
 output "serverPublic_ip" {
     value = module.ec2.server_public_ip
 }
 output "serverPrivate_ip" {
     value = module.ec2.server_private_ip
 }
-output "vpc_id" {
-    value = module.vpc.vpc.id
+
+output "serverPublic_ip_2" {
+    value = module.ec2.server_public_ip_2
+}
+output "serverPrivate_ip_2" {
+    value = module.ec2.server_private_ip_2
 }

@@ -9,3 +9,13 @@ resource "aws_subnet" "subnet-1" {
     Name = "prod-subnet"
   }
 }
+
+resource "aws_subnet" "subnet-1b" {
+  vpc_id            = var.vpc_id
+  cidr_block        = "10.0.2.0/24"
+  availability_zone = var.availabilityzone
+
+  tags = {
+    Name = "prod-subnet-1b"
+  }
+}

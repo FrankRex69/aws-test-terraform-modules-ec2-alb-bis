@@ -2,6 +2,10 @@ variable "networkInterface_id" {
   type = string
 }
 
+variable "networkInterface_id_b" {
+  type = string
+}
+
 variable "keyName" {
   type = string
 }
@@ -15,3 +19,5 @@ variable "ami_ec2" {
 }
 
 variable "aws_user_data" {}
+
+variable "aws_user_data_2" {}
