@@ -14,7 +14,7 @@ sudo apt install npm -y
 
 {* CLONE AND SETUP APP FROM GITHUB *}
 cd /var/www/html/
-sudo git clone https://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@github.com/FrankRex69/test-typescript-express.git
+sudo git clone https://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@github.com/FrankRex69/test-typescript-express.git
 cd /var/www/html/test-typescript-express/
 sudo npm install
 
